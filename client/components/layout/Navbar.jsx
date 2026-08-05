@@ -21,17 +21,17 @@ function Logo() {
   return (
     <Link
       href="/"
-      className="flex items-center gap-2 shrink-0"
+      className="group flex items-center gap-2.5 shrink-0"
       aria-label="GuptaMart home"
     >
-      <span className="flex h-9 w-9 items-center justify-center rounded-full bg-green-50 text-green-700">
-        <Leaf className="h-5 w-5" strokeWidth={2} aria-hidden="true" />
+      <span className="flex h-8 w-8 items-center justify-center rounded-full bg-green-50 text-green-700 transition-transform duration-200 ease-out group-hover:scale-105">
+        <Leaf className="h-4 w-4" strokeWidth={2} aria-hidden="true" />
       </span>
       <span className="flex flex-col leading-tight">
-        <span className="text-lg font-medium tracking-tight text-neutral-900">
+        <span className="text-[16px] font-semibold tracking-tight text-neutral-900">
           GuptaMart
         </span>
-        <span className="text-[11px] font-medium tracking-wide text-neutral-500">
+        <span className="text-[10px] font-medium uppercase tracking-wider text-neutral-400">
           Gupta General Store
         </span>
       </span>
@@ -45,13 +45,13 @@ function Logo() {
  */
 function NavLinks({ className = "", onLinkClick }) {
   return (
-    <ul className={`flex items-center gap-8 ${className}`}>
+    <ul className={`flex items-center gap-7 ${className}`}>
       {NAV_LINKS.map((link) => (
         <li key={link.href}>
           <Link
             href={link.href}
             onClick={onLinkClick}
-            className="text-sm font-medium text-neutral-600 transition-colors duration-200 hover:text-green-700"
+            className="text-[13.5px] font-medium text-neutral-600 transition-colors duration-200 ease-out hover:text-green-700"
           >
             {link.label}
           </Link>
@@ -69,14 +69,14 @@ function SearchBar({ className = "" }) {
   return (
     <div className={`relative w-full ${className}`}>
       <Search
-        className="pointer-events-none absolute left-3.5 top-1/2 h-4 w-4 -translate-y-1/2 text-neutral-400"
+        className="pointer-events-none absolute left-3.5 top-1/2 h-[15px] w-[15px] -translate-y-1/2 text-neutral-400"
         aria-hidden="true"
       />
       <Input
         type="search"
         placeholder="Search fresh produce, groceries..."
         aria-label="Search products"
-        className="h-10 w-full rounded-full border-neutral-200 bg-neutral-50 pl-10 text-sm placeholder:text-neutral-400 focus-visible:ring-green-600"
+        className="h-9 w-full rounded-full border border-transparent bg-neutral-50 pl-9 text-[13.5px] text-neutral-700 placeholder:text-neutral-400 shadow-none transition-colors duration-200 ease-out hover:bg-neutral-100/80 focus-visible:border-green-600/30 focus-visible:bg-white focus-visible:ring-2 focus-visible:ring-green-600/40"
       />
     </div>
   );
@@ -92,11 +92,11 @@ function IconAction({ icon: Icon, label, badge, href = "#" }) {
     <Link
       href={href}
       aria-label={label}
-      className="relative flex h-10 w-10 items-center justify-center rounded-full text-neutral-600 transition-colors duration-200 hover:bg-neutral-50 hover:text-green-700 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-green-600"
+      className="relative flex h-9 w-9 items-center justify-center rounded-full text-neutral-600 transition-all duration-200 ease-out hover:bg-neutral-50 hover:text-green-700 hover:scale-105 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-green-600"
     >
-      <Icon className="h-5 w-5" strokeWidth={2} aria-hidden="true" />
+      <Icon className="h-[18px] w-[18px]" strokeWidth={2} aria-hidden="true" />
       {badge ? (
-        <span className="absolute right-0.5 top-0.5 flex h-4 w-4 items-center justify-center rounded-full bg-green-700 text-[10px] font-medium text-white">
+        <span className="absolute right-0 top-0 flex h-4 w-4 items-center justify-center rounded-full bg-green-700 text-[9px] font-semibold text-white ring-2 ring-white">
           {badge}
         </span>
       ) : null}
@@ -115,15 +115,15 @@ export default function Navbar({ cartCount = 0 }) {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
 
   return (
-    <header className="sticky top-0 z-50 w-full border-b border-neutral-100 bg-white/95 backdrop-blur supports-[backdrop-filter]:bg-white/80">
-      <nav className="mx-auto flex h-18 max-w-7xl items-center gap-6 px-4 py-3 sm:px-6 lg:px-8">
+    <header className="sticky top-0 z-50 w-full border-b border-neutral-100 bg-white/90 shadow-[0_1px_2px_rgba(16,24,16,0.04)] backdrop-blur-md supports-[backdrop-filter]:bg-white/75">
+      <nav className="mx-auto flex h-14 max-w-7xl items-center gap-6 px-4 sm:px-6 lg:px-8">
         <Logo />
 
         {/* Desktop nav links */}
         <NavLinks className="hidden md:flex" />
 
         {/* Desktop search bar */}
-        <SearchBar className="hidden md:block md:max-w-xs lg:max-w-sm" />
+        <SearchBar className="hidden md:block md:max-w-[220px] lg:max-w-xs" />
 
         <div className="ml-auto flex items-center gap-1 md:ml-0">
           {/* Desktop icon actions */}
@@ -136,15 +136,15 @@ export default function Navbar({ cartCount = 0 }) {
           <Button
             variant="ghost"
             size="icon"
-            className="rounded-full text-neutral-600 hover:bg-neutral-50 hover:text-green-700 md:hidden"
+            className="h-9 w-9 rounded-full text-neutral-600 transition-all duration-200 ease-out hover:bg-neutral-50 hover:text-green-700 hover:scale-105 md:hidden"
             aria-label={isMenuOpen ? "Close menu" : "Open menu"}
             aria-expanded={isMenuOpen}
             onClick={() => setIsMenuOpen((open) => !open)}
           >
             {isMenuOpen ? (
-              <X className="h-5 w-5" aria-hidden="true" />
+              <X className="h-[18px] w-[18px]" aria-hidden="true" />
             ) : (
-              <Menu className="h-5 w-5" aria-hidden="true" />
+              <Menu className="h-[18px] w-[18px]" aria-hidden="true" />
             )}
           </Button>
         </div>
