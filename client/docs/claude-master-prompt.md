@@ -1,3 +1,27 @@
+Project:
+Gupta General Store
+
+Tech Stack:
+Next.js (App Router)
+JavaScript
+Tailwind CSS
+shadcn/ui
+Lucide React
+
+Coding Rules:
+- Functional components only
+- Reusable components
+- No inline styles
+- Clean folder structure
+- Responsive
+- Accessible
+- Semantic HTML
+- Production-ready code
+- No TypeScript
+- No Firebase unless requested
+- No mock backend calls unless requested
+
+Design Rules:
 Brand
 
 GuptaMart
