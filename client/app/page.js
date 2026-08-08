@@ -1,11 +1,13 @@
-
-import Navbar from "@/components/layout/Navbar";
+import { auth } from "@/lib/firebase";
 
 export default function Home() {
+  console.log(auth);
+
   return (
-    <main>
-      <Navbar />
-      <h1>GuptaMart</h1>
+    <main className="p-8">
+      <h1 className="text-2xl font-semibold">
+        GuptaMart
+      </h1>
     </main>
   );
 }
