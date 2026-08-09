@@ -26,7 +26,7 @@ const BENEFITS = [
 export default function TrustSection() {
   return (
     <section className="bg-[#fafaf4] py-16 md:py-24">
-      <div className="mx-auto max-w-[1280px] px-5 sm:px-6 lg:px-16">
+      <div className="mx-auto max-w-1280px px-5 sm:px-6 lg:px-16">
         <div className="grid grid-cols-1 gap-10 sm:grid-cols-3 md:gap-8">
           {BENEFITS.map(({ icon: Icon, title, description }) => (
             <div key={title} className="text-center sm:text-left">
@@ -36,7 +36,7 @@ export default function TrustSection() {
               <h3 className="mt-4 text-base font-semibold text-[#1a1c19]">
                 {title}
               </h3>
-              <p className="mt-1 text-sm leading-[20px] text-[#40493d]">
+              <p className="mt-1 text-sm leading-20px text-[#40493d]">
                 {description}
               </p>
             </div>
