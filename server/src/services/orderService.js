@@ -123,12 +123,14 @@ const updateOrderStatus = async (id, order_status) => {
     return await getOrderById(id);
 };
 
+// GET CART ITEMS FOR CHECKOUT
 const getCartItemsForCheckout = async (userId) => {
     const [rows] = await db.query(
         `SELECT
             ci.product_id,
             ci.quantity,
-            p.price
+            p.price,
+            p.stock
          FROM cart c
          JOIN cart_items ci ON c.id = ci.cart_id
          JOIN products p ON ci.product_id = p.id
@@ -139,7 +141,10 @@ const getCartItemsForCheckout = async (userId) => {
     return rows;
 };
 
+
+// CHECKOUT
 const checkout = async (orderData) => {
+
     const {
         user_id,
         customer_name,
@@ -150,6 +155,7 @@ const checkout = async (orderData) => {
         payment_method
     } = orderData;
 
+
     // 1. Get cart items
     const cartItems = await getCartItemsForCheckout(user_id);
 
@@ -157,13 +163,30 @@ const checkout = async (orderData) => {
         return null;
     }
 
-    // 2. Calculate total
+
+    // 2. Check stock
+    for (const item of cartItems) {
+
+        if (item.quantity > item.stock) {
+            return {
+                stockError: true,
+                productId: item.product_id,
+                requested: item.quantity,
+                available: item.stock
+            };
+        }
+    }
+
+
+    // 3. Calculate total
     const totalAmount = cartItems.reduce(
-        (total, item) => total + Number(item.price) * item.quantity,
+        (total, item) =>
+            total + Number(item.price) * item.quantity,
         0
     );
 
-    // 3. Create order
+
+    // 4. Create order
     const [orderResult] = await db.query(
         `INSERT INTO orders
         (user_id, customer_name, phone, address, landmark, pincode, total_amount, payment_method)
@@ -182,8 +205,10 @@ const checkout = async (orderData) => {
 
     const orderId = orderResult.insertId;
 
-    // 4. Move cart items to order_items
+
+    // 5. Move cart items to order_items
     for (const item of cartItems) {
+
         await db.query(
             `INSERT INTO order_items
             (order_id, product_id, quantity, price)
@@ -195,9 +220,22 @@ const checkout = async (orderData) => {
                 item.price
             ]
         );
+
+
+        // 6. Decrease product stock
+        await db.query(
+            `UPDATE products
+             SET stock = stock - ?
+             WHERE id = ?`,
+            [
+                item.quantity,
+                item.product_id
+            ]
+        );
     }
 
-    // 5. Clear cart
+
+    // 7. Clear cart
     await db.query(
         `DELETE ci
          FROM cart_items ci
@@ -206,7 +244,8 @@ const checkout = async (orderData) => {
         [user_id]
     );
 
-    // 6. Return complete order
+
+    // 8. Return complete order
     return await getOrderDetails(orderId);
 };
 

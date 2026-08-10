@@ -180,6 +180,15 @@ const checkout = async (req, res) => {
                 message: "Cart is empty"
             });
         }
+        if (order.stockError) {
+    return res.status(400).json({
+        success: false,
+        message: "Insufficient stock",
+        productId: order.productId,
+        requested: order.requested,
+        available: order.available
+    });
+}
 
         res.status(201).json({
             success: true,
