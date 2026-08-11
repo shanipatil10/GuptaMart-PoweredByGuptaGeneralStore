@@ -1,10 +1,10 @@
 import ProductCard from "@/components/product/ProductCard";
 
 const FEATURED_PRODUCTS = [
-  { id: 1, name: "Fresh Tomatoes", category: "Vegetables", unit: "1 kg", price: 40, image: "/images/products/tomatoes.jpg" },
-  { id: 2, name: "Aashirvaad Atta", category: "Grains & Pulses", unit: "5 kg", price: 255, image: "/images/products/atta.jpg" },
-  { id: 3, name: "Amul Taaza Milk", category: "Dairy", unit: "1 L", price: 32, image: "/images/products/milk.jpg" },
-  { id: 4, name: "Parle-G Biscuits", category: "Snacks", unit: "200 g", price: 20, image: "/images/products/parle-g.jpg" },
+  { id: 1, name: "Fresh Tomatoes", category: "Vegetables", unit: "1 kg", price: 40, image: "/images/products/tomatoes.png" },
+  { id: 2, name: "Aashirvaad Atta", category: "Grains & Pulses", unit: "5 kg", price: 255, image: "/images/products/atta.png" },
+  { id: 3, name: "Amul Taaza Milk", category: "Dairy", unit: "1 L", price: 32, image: "/images/products/milk.png" },
+  { id: 4, name: "Parle-G Biscuits", category: "Snacks", unit: "200 g", price: 20, image: "/images/products/parle-g.png" },
 ];
 
 /**

@@ -2,12 +2,12 @@ import Image from "next/image";
 import Link from "next/link";
 
 const CATEGORIES = [
-  { name: "Vegetables", image: "/images/categories/vegetables.jpg", href: "/categories/vegetables" },
-  { name: "Fruits", image: "/images/categories/fruits.jpg", href: "/categories/fruits" },
-  { name: "Dairy", image: "/images/categories/dairy.jpg", href: "/categories/dairy" },
-  { name: "Grains & Pulses", image: "/images/categories/grains.jpg", href: "/categories/grains" },
-  { name: "Snacks", image: "/images/categories/snacks.jpg", href: "/categories/snacks" },
-  { name: "Household", image: "/images/categories/household.jpg", href: "/categories/household" },
+  { name: "Vegetables", image: "/images/categories/vegetables.png", href: "/categories/vegetables" },
+  { name: "Dessert", image: "/images/categories/dessert.png", href: "/categories/fruits " },
+  { name: "Dairy", image: "/images/categories/dairy.png", href: "/categories/dairy" },
+  { name: "Grains & Pulses", image: "/images/categories/grains.png", href: "/categories/grains" },
+  { name: "Snacks", image: "/images/categories/snacks.png", href: "/categories/snacks" },
+  { name: "Household", image: "/images/categories/household.png", href: "/categories/household" },
 ];
 
 /**

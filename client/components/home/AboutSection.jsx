@@ -20,7 +20,7 @@ export default function AboutSection() {
         <div className="grid items-center gap-8 rounded-3xl bg-[#ebf7ea] p-6 sm:p-10 md:grid-cols-2 md:gap-12 md:p-14">
           <div className="relative aspect-[4/3] w-full overflow-hidden rounded-2xl">
             <Image
-              src="/images/about/store.jpg"
+              src="/images/about/Rohit.jpg"
               alt="Inside Gupta General Store"
               fill
               sizes="(max-width: 768px) 100vw, 50vw"
