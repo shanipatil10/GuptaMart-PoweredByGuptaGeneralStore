@@ -131,8 +131,8 @@ export default function Navbar({ cartCount = 0 }) {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
 
   return (
-    <header className="sticky top-0 z-50 w-full border-b border-neutral-100 bg-white/90 shadow-[0_1px_3px_rgba(16,24,16,0.05)] backdrop-blur-md supports-backdrop-filter:bg-white/85">
-      <nav className="mx-auto flex h-14 max-w-7xl items-center gap-6 px-4 sm:px-6 lg:px-8">
+    <header className="sticky top-0 z-50 w-full border-b border-white/40 bg-white/55 shadow-[0_4px_24px_rgba(30,60,35,0.06)] backdrop-blur-xl supports-backdrop-filter:bg-white/45">
+      <nav className="mx-auto flex h-16 max-w-7xl items-center gap-6 px-4 sm:px-6 lg:px-8">
         <Logo />
 
         {/* Desktop nav links */}

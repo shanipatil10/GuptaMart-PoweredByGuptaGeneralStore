@@ -3,7 +3,7 @@ import Link from "next/link";
 
 const CATEGORIES = [
   { name: "Vegetables", image: "/images/categories/vegetables.png", href: "/categories/vegetables" },
-  { name: "Dessert", image: "/images/categories/dessert.png", href: "/categories/fruits " },
+  { name: "Dessert", image: "/images/categories/dessert.png", href: "/categories/dessert" },
   { name: "Dairy", image: "/images/categories/dairy.png", href: "/categories/dairy" },
   { name: "Grains & Pulses", image: "/images/categories/grains.png", href: "/categories/grains" },
   { name: "Snacks", image: "/images/categories/snacks.png", href: "/categories/snacks" },
