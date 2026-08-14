@@ -3,22 +3,20 @@
 import { useState } from "react";
 import Image from "next/image";
 import { Plus, Check } from "lucide-react";
+import { useCart } from "@/context/CartContext";
 
-/**
- * ProductCard
- * Reusable card for grocery items. The Add button is purely cosmetic
- * for now — it flips to a brief "Added" confirmation and resets, with
- * no cart state. Real cart logic plugs in here later.
- *
- * Expected product shape:
- * { id, name, category, unit, price, image }
- */
 export default function ProductCard({ product }) {
   const [justAdded, setJustAdded] = useState(false);
+  const { addToCart } = useCart();
 
   function handleAdd() {
+    addToCart(product, 1);
+
     setJustAdded(true);
-    setTimeout(() => setJustAdded(false), 1500);
+
+    setTimeout(() => {
+      setJustAdded(false);
+    }, 1500);
   }
 
   return (
@@ -37,6 +35,7 @@ export default function ProductCard({ product }) {
         <p className="text-[11px] font-semibold uppercase tracking-[0.05em] text-[#4e6452]">
           {product.category} • {product.unit}
         </p>
+
         <h3 className="text-sm font-semibold text-[#1a1c19] sm:text-base">
           {product.name}
         </h3>
@@ -45,11 +44,12 @@ export default function ProductCard({ product }) {
           <span className="text-base font-semibold text-[#1a1c19] sm:text-lg">
             ₹{product.price}
           </span>
+
           <button
             type="button"
             onClick={handleAdd}
             aria-label={`Add ${product.name} to cart`}
-            className={`flex h-8 items-center gap-1 rounded-full px-3 text-xs font-semibold transition-colors duration-200 ${
+            className={`flex h-8 items-center gap-1 rounded-full px-3 text-xs font-semibold transition-all duration-200 active:scale-95 ${
               justAdded
                 ? "bg-[#88d982] text-[#0b2012]"
                 : "bg-[#1c6d24] text-white hover:bg-[#155a1d]"

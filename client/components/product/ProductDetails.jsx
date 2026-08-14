@@ -5,7 +5,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { ShoppingCart, Check, Heart, Wallet, ShieldCheck } from "lucide-react";
 import QuantitySelector from "@/components/product/QuantitySelector";
-
+import { useCart } from "@/context/CartContext";
 /**
  * ProductDetails
  * Left: product image (thumbnails only render if the product ever gets
@@ -18,6 +18,7 @@ import QuantitySelector from "@/components/product/QuantitySelector";
  * persistence yet.
  */
 export default function ProductDetails({ product }) {
+  const { addToCart } = useCart();
   const gallery =
     product.gallery && product.gallery.length > 0
       ? product.gallery
@@ -28,11 +29,15 @@ export default function ProductDetails({ product }) {
   const [justAdded, setJustAdded] = useState(false);
   const [isSaved, setIsSaved] = useState(false);
 
-  function handleAddToCart() {
-    setJustAdded(true);
-    setTimeout(() => setJustAdded(false), 1500);
-  }
+ function handleAddToCart() {
+  addToCart(product, quantity);
 
+  setJustAdded(true);
+
+  setTimeout(() => {
+    setJustAdded(false);
+  }, 1500);
+}
   return (
     <div className="grid gap-10 md:grid-cols-2 md:gap-12">
       {/* Gallery */}

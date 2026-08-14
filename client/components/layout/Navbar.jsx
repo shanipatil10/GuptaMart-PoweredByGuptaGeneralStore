@@ -6,6 +6,7 @@ import { usePathname } from "next/navigation";
 import { Search, ShoppingCart, User, Menu, X, Leaf } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import { useCart } from "@/context/CartContext";
 
 const NAV_LINKS = [
   { label: "Home", href: "/" },
@@ -127,9 +128,9 @@ function IconAction({ icon: Icon, label, badge, href = "#" }) {
  * and profile. Desktop-first, collapses into a mobile menu below the
  * md breakpoint.
  */
-export default function Navbar({ cartCount = 0 }) {
+export default function Navbar() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
-
+  const { cartCount } = useCart();
   return (
     <header className="sticky top-0 z-50 w-full border-b border-white/40 bg-white/55 shadow-[0_4px_24px_rgba(30,60,35,0.06)] backdrop-blur-xl supports-backdrop-filter:bg-white/45">
       <nav className="mx-auto flex h-16 max-w-7xl items-center gap-6 px-4 sm:px-6 lg:px-8">
