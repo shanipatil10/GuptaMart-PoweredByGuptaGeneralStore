@@ -67,11 +67,8 @@ export default function CartSummary() {
       </div>
 
       {/* Proceed to checkout */}
-      <button
-        type="button"
-        onClick={() => {
-          console.log("Checkout clicked");
-        }}
+      <Link
+        href="/checkout"
         className="group mt-6 flex h-12 w-full items-center justify-center gap-2 rounded-full bg-[#1c6d24] text-sm font-semibold text-white shadow-sm transition-all duration-200 hover:-translate-y-0.5 hover:bg-[#155a1d] hover:shadow-md active:translate-y-0 active:scale-[0.98]"
       >
         Proceed to Checkout
@@ -80,7 +77,7 @@ export default function CartSummary() {
           className="h-4 w-4 transition-transform duration-200 group-hover:translate-x-1"
           aria-hidden="true"
         />
-      </button>
+      </Link>
 
       {/* Continue shopping */}
       <Link
