@@ -5,6 +5,13 @@ import Image from "next/image";
 import { Plus, Check } from "lucide-react";
 import { useCart } from "@/context/CartContext";
 
+/**
+ * ProductCard
+ * Reusable card for grocery items.
+ *
+ * Expected product shape:
+ * { id, name, category, unit, price, image }
+ */
 export default function ProductCard({ product }) {
   const [justAdded, setJustAdded] = useState(false);
   const { addToCart } = useCart();
