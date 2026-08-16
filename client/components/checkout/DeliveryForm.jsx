@@ -11,14 +11,14 @@ export function validateDeliveryForm(values) {
 
   if (!values.name.trim()) {
     errors.name = "Please enter your name.";
-  } else if (values.name.trim().length < 2) {
+  } else if (values.name.trim().length < 3) {
     errors.name = "Name looks too short.";
   }
 
   const digitsOnly = values.mobile.replace(/\D/g, "");
   if (!values.mobile.trim()) {
     errors.mobile = "Please enter your mobile number.";
-  } else if (!/^[6-9]\d{9}$/.test(digitsOnly)) {
+  } else if (!/^[6-9]\d{9}$/.test(digitsOnly) || digitsOnly.length > 10) {
     errors.mobile = "Enter a valid 10-digit mobile number.";
   }
 
@@ -91,6 +91,7 @@ export default function DeliveryForm({ values, errors, onChange }) {
               placeholder="98765 43210"
               autoComplete="tel"
               inputMode="numeric"
+              maxLength={10}
               className="h-full w-full bg-transparent px-3 text-sm text-[#1a1c19] placeholder:text-[#9aa39a] focus:outline-none"
             />
           </div>

@@ -22,7 +22,7 @@ const INITIAL_VALUES = {
 };
 
 export default function CheckoutPage() {
-  const { cartItems, subtotal, isHydrated, removeFromCart } = useCart();
+  const { cartItems, subtotal, isHydrated, clearCart } = useCart();
 
   const [values, setValues] = useState(INITIAL_VALUES);
   const [errors, setErrors] = useState({});
@@ -60,7 +60,7 @@ export default function CheckoutPage() {
       // CartContext.jsx itself wasn't part of this task's inputs, so
       // rather than guess at adding a new clearCart() method to a file
       // I haven't inspected, this reuses what's already exposed.
-      cartItems.forEach((item) => removeFromCart(item.id));
+      clearCart();
 
       setOrder(result);
     } finally {
