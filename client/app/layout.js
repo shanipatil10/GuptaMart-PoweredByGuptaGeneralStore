@@ -1,6 +1,7 @@
 import { Geist, Geist_Mono,Cormorant_Garamond } from "next/font/google";
 import "./globals.css";
 import { CartProvider } from "@/context/CartContext";
+import { AuthProvider } from "@/context/AuthContext";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -29,7 +30,11 @@ export default function RootLayout({ children }) {
   className={`${geistSans.variable} ${geistMono.variable} ${cormorant.variable}`}
 >
       <body className="min-h-full flex flex-col">
-        <CartProvider>{children}</CartProvider>
+        <AuthProvider>
+  <CartProvider>
+    {children}
+  </CartProvider>
+</AuthProvider>
       </body>
     </html>
   );
