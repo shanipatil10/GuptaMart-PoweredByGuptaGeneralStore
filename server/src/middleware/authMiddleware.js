@@ -1,4 +1,4 @@
-const admin = require("../config/firebaseAdmin");
+const { auth } = require("../config/firebaseAdmin");
 
 const verifyToken = async (req, res, next) => {
     try {
@@ -13,7 +13,7 @@ const verifyToken = async (req, res, next) => {
 
         const token = authHeader.split("Bearer ")[1];
 
-        const decodedToken = await admin.auth().verifyIdToken(token);
+        const decodedToken = await auth.verifyIdToken(token);
 
         req.user = decodedToken;
 

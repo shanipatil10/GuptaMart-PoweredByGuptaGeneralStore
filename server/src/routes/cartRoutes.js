@@ -1,4 +1,5 @@
 const express = require("express");
+const verifyToken = require("../middleware/authMiddleware");
 
 const {
     getCart,
@@ -10,7 +11,7 @@ const {
 
 const router = express.Router();
 
-router.get("/:userId", getCart);
+router.get("/:userId", verifyToken, getCart);
 
 router.post("/", createCart);
 

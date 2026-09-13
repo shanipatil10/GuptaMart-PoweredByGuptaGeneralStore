@@ -110,7 +110,8 @@ export default function AuthForm() {
 
     const token = await user.getIdToken();
 
-    console.log("Firebase ID Token:", token);
+   console.log("Firebase ID Token:", token);
+   console.log("Firebase UID:", user.uid);
 
     router.push("/");
 } else if (mode === "signup") {

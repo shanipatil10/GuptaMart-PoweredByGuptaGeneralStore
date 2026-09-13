@@ -1,9 +1,29 @@
 const cartService = require("../services/cartService");
+const db = require("../config/db");
 
 // GET CART BY USER ID
 const getCart = async (req, res) => {
     try {
-        const cart = await cartService.getCartByUserId(req.params.userId);
+        // Firebase UID from verified token
+        const firebaseUid = req.user.uid;
+
+        // Find MySQL user ID using Firebase UID
+        const [users] = await db.query(
+            `SELECT id FROM users WHERE firebase_uid = ?`,
+            [firebaseUid]
+        );
+
+        if (users.length === 0) {
+            return res.status(404).json({
+                success: false,
+                message: "User not found"
+            });
+        }
+
+        const userId = users[0].id;
+
+        // Get cart using MySQL user ID
+        const cart = await cartService.getCartByUserId(userId);
 
         res.status(200).json({
             success: true,
@@ -11,7 +31,7 @@ const getCart = async (req, res) => {
         });
 
     } catch (error) {
-        console.error(error);
+        console.error("Get Cart Error:", error);
 
         res.status(500).json({
             success: false,
@@ -19,8 +39,6 @@ const getCart = async (req, res) => {
         });
     }
 };
-
-
 // CREATE CART
 const createCart = async (req, res) => {
     try {
