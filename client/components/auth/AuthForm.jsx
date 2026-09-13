@@ -100,9 +100,20 @@ export default function AuthForm() {
     setIsLoading(true);
     try {
       if (mode === "login") {
-        await signInWithEmailAndPassword(auth, email.trim(), password);
-        router.push("/");
-      } else if (mode === "signup") {
+    const userCredential = await signInWithEmailAndPassword(
+        auth,
+        email.trim(),
+        password
+    );
+
+    const user = userCredential.user;
+
+    const token = await user.getIdToken();
+
+    console.log("Firebase ID Token:", token);
+
+    router.push("/");
+} else if (mode === "signup") {
         await createUserWithEmailAndPassword(auth, email.trim(), password);
         router.push("/");
       } else {
