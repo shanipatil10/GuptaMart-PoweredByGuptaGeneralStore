@@ -4,36 +4,12 @@ import ProductCard from "@/components/product/ProductCard";
 import Image from "next/image";
 
 const categories = [
-  {
-    name: "Vegetables",
-    image: "/images/categories/vegetables.png",
-    href: "#vegetables",
-  },
-  {
-    name: "Desserts",
-    image: "/images/categories/dessert.png",
-    href: "#desserts",
-  },
-  {
-    name: "Dairy",
-    image: "/images/categories/dairy.png",
-    href: "#dairy",
-  },
-  {
-    name: "Grains & Pulses",
-    image: "/images/categories/grains.png",
-    href: "#grains",
-  },
-  {
-    name: "Snacks",
-    image: "/images/categories/snacks.png",
-    href: "#snacks",
-  },
-  {
-    name: "Household",
-    image: "/images/categories/household.png",
-    href: "#household",
-  },
+  { name: "Vegetables", image: "/images/categories/vegetables.png", href: "#vegetables" },
+  { name: "Desserts", image: "/images/categories/dessert.png", href: "#desserts" },
+  { name: "Dairy", image: "/images/categories/dairy.png", href: "#dairy" },
+  { name: "Grains & Pulses", image: "/images/categories/grains.png", href: "#grains" },
+  { name: "Snacks", image: "/images/categories/snacks.png", href: "#snacks" },
+  { name: "Household", image: "/images/categories/household.png", href: "#household" },
 ];
 
 const productSections = [
@@ -70,7 +46,6 @@ const productSections = [
       },
     ],
   },
-
   {
     id: "desserts",
     title: "Desserts",
@@ -82,7 +57,7 @@ const productSections = [
         unit: "1 pack",
         price: 80,
         image: "/images/categories/dessert.png",
-        href:null,
+        href: null,
       },
       {
         id: "dessert-2",
@@ -91,7 +66,7 @@ const productSections = [
         unit: "500 g",
         price: 120,
         image: "/images/categories/dessert.png",
-        href:null,
+        href: null,
       },
       {
         id: "dessert-3",
@@ -100,11 +75,10 @@ const productSections = [
         unit: "1 pack",
         price: 60,
         image: "/images/categories/dessert.png",
-        href:null,
+        href: null,
       },
     ],
   },
-
   {
     id: "dairy",
     title: "Dairy & Milk",
@@ -138,7 +112,6 @@ const productSections = [
       },
     ],
   },
-
   {
     id: "grains",
     title: "Grains & Pulses",
@@ -172,7 +145,6 @@ const productSections = [
       },
     ],
   },
-
   {
     id: "snacks",
     title: "Snacks & Biscuits",
@@ -206,7 +178,6 @@ const productSections = [
       },
     ],
   },
-
   {
     id: "household",
     title: "Household Essentials",
@@ -218,7 +189,7 @@ const productSections = [
         unit: "1 pack",
         price: 100,
         image: "/images/categories/household.png",
-        href:null,
+        href: null,
       },
       {
         id: "household-2",
@@ -227,7 +198,7 @@ const productSections = [
         unit: "1 pack",
         price: 150,
         image: "/images/categories/household.png",
-        href:null,
+        href: null,
       },
       {
         id: "household-3",
@@ -236,7 +207,7 @@ const productSections = [
         unit: "1 pack",
         price: 120,
         image: "/images/categories/household.png",
-        href:null,
+        href: null,
       },
     ],
   },
@@ -299,7 +270,6 @@ export default function CategoriesPage() {
       <Navbar />
 
       <main className="min-h-screen bg-[#fafaf4]">
-        {/* Header */}
         <section className="mx-auto max-w-[1280px] px-5 pb-8 pt-12 sm:px-6 sm:pt-16 lg:px-16">
           <p className="mb-3 text-xs font-semibold uppercase tracking-[0.08em] text-[#1c6d24]">
             GuptaMart
@@ -314,7 +284,6 @@ export default function CategoriesPage() {
           </p>
         </section>
 
-        {/* Category strip */}
         <section className="mx-auto max-w-[1280px] px-5 pb-14 sm:px-6 lg:px-16">
           <div
             className="
@@ -361,7 +330,6 @@ export default function CategoriesPage() {
           </div>
         </section>
 
-        {/* Product sections */}
         <section className="mx-auto max-w-[1280px] space-y-14 px-5 pb-20 sm:px-6 lg:px-16">
           {productSections.map((section) => (
             <CategorySection key={section.id} section={section} />
