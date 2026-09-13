@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import Link from "next/link";
 import Image from "next/image";
 import { Plus, Check } from "lucide-react";
 import { useCart } from "@/context/CartContext";
@@ -10,11 +11,25 @@ import { useCart } from "@/context/CartContext";
  * Reusable card for grocery items.
  *
  * Expected product shape:
- * { id, name, category, unit, price, image }
+ * { id, name, category, unit, price, image, href? }
+ *
+ * Routing: by default the card links to /product/{id}, since that
+ * matches the canonical keys in lib/data/products.js. Pass an explicit
+ * `href` to override this — e.g. a different pack-size of the same
+ * product pointing at one shared detail page — or pass `href: null`
+ * to mark a product as not linkable yet (no detail page exists for it).
+ *
+ * The Add button is a sibling of the <Link>, not nested inside it —
+ * nesting a <button> inside an <a> is invalid HTML and makes click/
+ * keyboard behavior unreliable. Kept as siblings, both stay fully and
+ * independently clickable with no stopPropagation tricks needed.
  */
 export default function ProductCard({ product }) {
   const [justAdded, setJustAdded] = useState(false);
   const { addToCart } = useCart();
+
+  const href =
+    product.href === null ? null : product.href ?? `/product/${product.id}`;
 
   function handleAdd() {
     addToCart(product, 1);
@@ -26,8 +41,8 @@ export default function ProductCard({ product }) {
     }, 1500);
   }
 
-  return (
-    <div className="group rounded-2xl bg-white p-3 shadow-[0_4px_20px_rgba(45,66,50,0.06)] transition-shadow duration-200 hover:shadow-[0_8px_30px_rgba(45,66,50,0.1)]">
+  const cardBody = (
+    <>
       <div className="relative aspect-square overflow-hidden rounded-xl bg-[#ebf7ea]">
         <Image
           src={product.image}
@@ -38,7 +53,7 @@ export default function ProductCard({ product }) {
         />
       </div>
 
-      <div className="mt-3 space-y-1">
+      <div className="mt-3 space-y-1 pr-14">
         <p className="text-[11px] font-semibold uppercase tracking-[0.05em] text-[#4e6452]">
           {product.category} • {product.unit}
         </p>
@@ -47,35 +62,48 @@ export default function ProductCard({ product }) {
           {product.name}
         </h3>
 
-        <div className="flex items-center justify-between pt-1">
-          <span className="text-base font-semibold text-[#1a1c19] sm:text-lg">
-            ₹{product.price}
-          </span>
-
-          <button
-            type="button"
-            onClick={handleAdd}
-            aria-label={`Add ${product.name} to cart`}
-            className={`flex h-8 items-center gap-1 rounded-full px-3 text-xs font-semibold transition-all duration-200 active:scale-95 ${
-              justAdded
-                ? "bg-[#88d982] text-[#0b2012]"
-                : "bg-[#1c6d24] text-white hover:bg-[#155a1d]"
-            }`}
-          >
-            {justAdded ? (
-              <>
-                <Check className="h-3.5 w-3.5" aria-hidden="true" />
-                Added
-              </>
-            ) : (
-              <>
-                <Plus className="h-3.5 w-3.5" aria-hidden="true" />
-                Add
-              </>
-            )}
-          </button>
-        </div>
+        <span className="block text-base font-semibold text-[#1a1c19] sm:text-lg">
+          ₹{product.price}
+        </span>
       </div>
+    </>
+  );
+
+  return (
+    <div className="group relative rounded-2xl bg-white p-3 shadow-[0_4px_20px_rgba(45,66,50,0.06)] transition-shadow duration-200 hover:shadow-[0_8px_30px_rgba(45,66,50,0.1)]">
+      {href ? (
+        <Link
+          href={href}
+          className="block rounded-xl focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#1c6d24] focus-visible:ring-offset-2"
+        >
+          {cardBody}
+        </Link>
+      ) : (
+        <div className="block">{cardBody}</div>
+      )}
+
+      <button
+        type="button"
+        onClick={handleAdd}
+        aria-label={`Add ${product.name} to cart`}
+        className={`absolute bottom-3 right-3 flex h-8 items-center gap-1 rounded-full px-3 text-xs font-semibold transition-all duration-200 active:scale-95 ${
+          justAdded
+            ? "bg-[#88d982] text-[#0b2012]"
+            : "bg-[#1c6d24] text-white hover:bg-[#155a1d]"
+        }`}
+      >
+        {justAdded ? (
+          <>
+            <Check className="h-3.5 w-3.5" aria-hidden="true" />
+            Added
+          </>
+        ) : (
+          <>
+            <Plus className="h-3.5 w-3.5" aria-hidden="true" />
+            Add
+          </>
+        )}
+      </button>
     </div>
   );
 }

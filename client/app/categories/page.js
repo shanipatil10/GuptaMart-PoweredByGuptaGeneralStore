@@ -48,6 +48,8 @@ const productSections = [
         unit: "1 kg",
         price: 40,
         image: "/images/products/tomatoes.png",
+        // No href override needed: id "tomatoes" already matches the
+        // canonical key in lib/data/products.js.
       },
       {
         id: "tomatoes-2",
@@ -56,6 +58,9 @@ const productSections = [
         unit: "500 g",
         price: 25,
         image: "/images/products/tomatoes.png",
+        // Same product, different pack size — no separate detail page
+        // exists per size, so this links to the one real product page.
+        href: "/product/tomatoes",
       },
       {
         id: "tomatoes-3",
@@ -64,6 +69,7 @@ const productSections = [
         unit: "2 kg",
         price: 75,
         image: "/images/products/tomatoes.png",
+        href: "/product/tomatoes",
       },
     ],
   },
@@ -79,6 +85,9 @@ const productSections = [
         unit: "1 pack",
         price: 80,
         image: "/images/categories/dessert.png",
+        // No canonical "dessert" product exists in products.js yet —
+        // explicitly not linkable rather than pointing at a 404.
+        href: null,
       },
       {
         id: "dessert-2",
@@ -87,6 +96,7 @@ const productSections = [
         unit: "500 g",
         price: 120,
         image: "/images/categories/dessert.png",
+        href: null,
       },
       {
         id: "dessert-3",
@@ -95,6 +105,7 @@ const productSections = [
         unit: "1 pack",
         price: 60,
         image: "/images/categories/dessert.png",
+        href: null,
       },
     ],
   },
@@ -118,6 +129,7 @@ const productSections = [
         unit: "500 ml",
         price: 18,
         image: "/images/products/milk.png",
+        href: "/product/milk",
       },
       {
         id: "milk-3",
@@ -126,6 +138,7 @@ const productSections = [
         unit: "2 L",
         price: 62,
         image: "/images/products/milk.png",
+        href: "/product/milk",
       },
     ],
   },
@@ -149,6 +162,7 @@ const productSections = [
         unit: "10 kg",
         price: 490,
         image: "/images/products/atta.png",
+        href: "/product/atta",
       },
       {
         id: "atta-3",
@@ -157,6 +171,7 @@ const productSections = [
         unit: "2 kg",
         price: 110,
         image: "/images/products/atta.png",
+        href: "/product/atta",
       },
     ],
   },
@@ -180,6 +195,7 @@ const productSections = [
         unit: "800 g",
         price: 80,
         image: "/images/products/parle-g.png",
+        href: "/product/parle-g",
       },
       {
         id: "parle-g-3",
@@ -188,6 +204,7 @@ const productSections = [
         unit: "100 g",
         price: 10,
         image: "/images/products/parle-g.png",
+        href: "/product/parle-g",
       },
     ],
   },
@@ -203,6 +220,8 @@ const productSections = [
         unit: "1 pack",
         price: 100,
         image: "/images/categories/household.png",
+        // No canonical "household" product exists in products.js yet.
+        href: null,
       },
       {
         id: "household-2",
@@ -211,6 +230,7 @@ const productSections = [
         unit: "1 pack",
         price: 150,
         image: "/images/categories/household.png",
+        href: null,
       },
       {
         id: "household-3",
@@ -219,6 +239,7 @@ const productSections = [
         unit: "1 pack",
         price: 120,
         image: "/images/categories/household.png",
+        href: null,
       },
     ],
   },
