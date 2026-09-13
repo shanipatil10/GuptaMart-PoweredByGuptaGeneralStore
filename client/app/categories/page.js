@@ -48,6 +48,7 @@ const productSections = [
         unit: "1 kg",
         price: 40,
         image: "/images/products/tomatoes.png",
+        href: "/product/tomatoes",
       },
       {
         id: "tomatoes-2",
@@ -56,6 +57,7 @@ const productSections = [
         unit: "500 g",
         price: 25,
         image: "/images/products/tomatoes.png",
+        href: "/product/tomatoes",
       },
       {
         id: "tomatoes-3",
@@ -64,6 +66,7 @@ const productSections = [
         unit: "2 kg",
         price: 75,
         image: "/images/products/tomatoes.png",
+        href: "/product/tomatoes",
       },
     ],
   },
@@ -79,6 +82,7 @@ const productSections = [
         unit: "1 pack",
         price: 80,
         image: "/images/categories/dessert.png",
+        href:null,
       },
       {
         id: "dessert-2",
@@ -87,6 +91,7 @@ const productSections = [
         unit: "500 g",
         price: 120,
         image: "/images/categories/dessert.png",
+        href:null,
       },
       {
         id: "dessert-3",
@@ -95,6 +100,7 @@ const productSections = [
         unit: "1 pack",
         price: 60,
         image: "/images/categories/dessert.png",
+        href:null,
       },
     ],
   },
@@ -110,6 +116,7 @@ const productSections = [
         unit: "1 L",
         price: 32,
         image: "/images/products/milk.png",
+        href: "/product/milk",
       },
       {
         id: "milk-2",
@@ -118,6 +125,7 @@ const productSections = [
         unit: "500 ml",
         price: 18,
         image: "/images/products/milk.png",
+        href: "/product/milk",
       },
       {
         id: "milk-3",
@@ -126,6 +134,7 @@ const productSections = [
         unit: "2 L",
         price: 62,
         image: "/images/products/milk.png",
+        href: "/product/milk",
       },
     ],
   },
@@ -141,6 +150,7 @@ const productSections = [
         unit: "5 kg",
         price: 255,
         image: "/images/products/atta.png",
+        href: "/product/atta",
       },
       {
         id: "atta-2",
@@ -149,6 +159,7 @@ const productSections = [
         unit: "10 kg",
         price: 490,
         image: "/images/products/atta.png",
+        href: "/product/atta",
       },
       {
         id: "atta-3",
@@ -157,6 +168,7 @@ const productSections = [
         unit: "2 kg",
         price: 110,
         image: "/images/products/atta.png",
+        href: "/product/atta",
       },
     ],
   },
@@ -172,6 +184,7 @@ const productSections = [
         unit: "200 g",
         price: 20,
         image: "/images/products/parle-g.png",
+        href: "/product/parle-g",
       },
       {
         id: "parle-g-2",
@@ -180,6 +193,7 @@ const productSections = [
         unit: "800 g",
         price: 80,
         image: "/images/products/parle-g.png",
+        href: "/product/parle-g",
       },
       {
         id: "parle-g-3",
@@ -188,6 +202,7 @@ const productSections = [
         unit: "100 g",
         price: 10,
         image: "/images/products/parle-g.png",
+        href: "/product/parle-g",
       },
     ],
   },
@@ -203,6 +218,7 @@ const productSections = [
         unit: "1 pack",
         price: 100,
         image: "/images/categories/household.png",
+        href:null,
       },
       {
         id: "household-2",
@@ -211,6 +227,7 @@ const productSections = [
         unit: "1 pack",
         price: 150,
         image: "/images/categories/household.png",
+        href:null,
       },
       {
         id: "household-3",
@@ -219,6 +236,7 @@ const productSections = [
         unit: "1 pack",
         price: 120,
         image: "/images/categories/household.png",
+        href:null,
       },
     ],
   },
