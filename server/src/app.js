@@ -1,4 +1,7 @@
+const verifyToken = require("./middleware/authMiddleware");
 const express = require("express");
+require("./config/firebaseAdmin");
+
 const productRoutes = require("./routes/productRoutes");
 const categoryRoutes = require("./routes/categoryRoutes");
 const userRoutes = require("./routes/userRoutes");
@@ -20,6 +23,14 @@ app.get("/", (req, res) => {
     res.json({
         success: true,
         message: "Gupta General Store API is running",
+    });
+});
+
+app.get("/api/test-auth", verifyToken, (req, res) => {
+    res.json({
+        success: true,
+        message: "Authentication successful",
+        user: req.user
     });
 });
 

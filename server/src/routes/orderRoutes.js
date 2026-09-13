@@ -1,3 +1,4 @@
+const verifyToken = require("../middleware/authMiddleware");
 const express = require("express");
 
 const {
