@@ -186,6 +186,7 @@ const getCartItemsForCheckout = async (userId) => {
 
 
 // CHECKOUT
+// CHECKOUT
 const checkout = async (orderData) => {
 
     const {
@@ -198,98 +199,143 @@ const checkout = async (orderData) => {
         payment_method
     } = orderData;
 
+    // Get a dedicated database connection
+    const connection = await db.getConnection();
 
-    // 1. Get cart items
-    const cartItems = await getCartItemsForCheckout(user_id);
+    try {
 
-    if (cartItems.length === 0) {
-        return null;
-    }
+        // Start transaction
+        await connection.beginTransaction();
 
+        // 1. Get cart items
+        const [cartItems] = await connection.query(
+            `SELECT 
+                ci.product_id,
+                ci.quantity,
+                p.price,
+                p.stock
+             FROM cart_items ci
+             JOIN cart c ON ci.cart_id = c.id
+             JOIN products p ON ci.product_id = p.id
+             WHERE c.user_id = ?
+             FOR UPDATE`,
+            [user_id]
+        );
 
-    // 2. Check stock
-    for (const item of cartItems) {
-
-        if (item.quantity > item.stock) {
-            return {
-                stockError: true,
-                productId: item.product_id,
-                requested: item.quantity,
-                available: item.stock
-            };
+        // Cart empty
+        if (cartItems.length === 0) {
+            await connection.rollback();
+            return null;
         }
-    }
 
 
-    // 3. Calculate total
-    const totalAmount = cartItems.reduce(
-        (total, item) =>
-            total + Number(item.price) * item.quantity,
-        0
-    );
+        // 2. Check stock
+        for (const item of cartItems) {
+
+            if (item.quantity > item.stock) {
+
+                await connection.rollback();
+
+                return {
+                    stockError: true,
+                    productId: item.product_id,
+                    requested: item.quantity,
+                    available: item.stock
+                };
+            }
+        }
 
 
-    // 4. Create order
-    const [orderResult] = await db.query(
-        `INSERT INTO orders
-        (user_id, customer_name, phone, address, landmark, pincode, total_amount, payment_method)
-        VALUES (?, ?, ?, ?, ?, ?, ?, ?)`,
-        [
-            user_id,
-            customer_name,
-            phone,
-            address,
-            landmark,
-            pincode,
-            totalAmount,
-            payment_method || "COD"
-        ]
-    );
-
-    const orderId = orderResult.insertId;
-
-
-    // 5. Move cart items to order_items
-    for (const item of cartItems) {
-
-        await db.query(
-            `INSERT INTO order_items
-            (order_id, product_id, quantity, price)
-            VALUES (?, ?, ?, ?)`,
-            [
-                orderId,
-                item.product_id,
-                item.quantity,
-                item.price
-            ]
+        // 3. Calculate total
+        const totalAmount = cartItems.reduce(
+            (total, item) =>
+                total + Number(item.price) * item.quantity,
+            0
         );
 
 
-        // 6. Decrease product stock
-        await db.query(
-            `UPDATE products
-             SET stock = stock - ?
-             WHERE id = ?`,
+        // 4. Create order
+        const [orderResult] = await connection.query(
+            `INSERT INTO orders
+            (user_id, customer_name, phone, address, landmark, pincode, total_amount, payment_method)
+            VALUES (?, ?, ?, ?, ?, ?, ?, ?)`,
             [
-                item.quantity,
-                item.product_id
+                user_id,
+                customer_name,
+                phone,
+                address,
+                landmark,
+                pincode,
+                totalAmount,
+                payment_method || "COD"
             ]
         );
+
+        const orderId = orderResult.insertId;
+
+
+        // 5. Move cart items to order_items
+        for (const item of cartItems) {
+
+            await connection.query(
+                `INSERT INTO order_items
+                (order_id, product_id, quantity, price)
+                VALUES (?, ?, ?, ?)`,
+                [
+                    orderId,
+                    item.product_id,
+                    item.quantity,
+                    item.price
+                ]
+            );
+
+
+            // 6. Decrease product stock
+            await connection.query(
+                `UPDATE products
+                 SET stock = stock - ?
+                 WHERE id = ?
+                 AND stock >= ?`,
+                [
+                    item.quantity,
+                    item.product_id,
+                    item.quantity
+                ]
+            );
+        }
+
+
+        // 7. Clear cart
+        await connection.query(
+            `DELETE ci
+             FROM cart_items ci
+             JOIN cart c ON ci.cart_id = c.id
+             WHERE c.user_id = ?`,
+            [user_id]
+        );
+
+
+        // 8. Commit transaction
+        await connection.commit();
+
+
+        // 9. Return complete order
+        return await getOrderDetails(orderId);
+
+    } catch (error) {
+
+        // Something failed → undo everything
+        await connection.rollback();
+
+        console.error("Checkout Transaction Error:", error);
+
+        throw error;
+
+    } finally {
+
+        // Release connection
+        connection.release();
     }
-
-
-    // 7. Clear cart
-    await db.query(
-        `DELETE ci
-         FROM cart_items ci
-         JOIN cart c ON ci.cart_id = c.id
-         WHERE c.user_id = ?`,
-        [user_id]
-    );
-
-
-    // 8. Return complete order
-    return await getOrderDetails(orderId);
 };
 
 module.exports = {

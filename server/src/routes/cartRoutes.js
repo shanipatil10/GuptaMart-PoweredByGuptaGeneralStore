@@ -11,7 +11,7 @@ const {
 
 const router = express.Router();
 
-router.get("/:userId", verifyToken, getCart);
+router.get("/", verifyToken, getCart);
 
 router.post("/", verifyToken, createCart);
 
