@@ -42,9 +42,41 @@ const getCart = async (req, res) => {
 // CREATE CART
 const createCart = async (req, res) => {
     try {
-        const { user_id } = req.body;
+        // Firebase UID from verified token
+        const firebaseUid = req.user.uid;
 
-        const cartId = await cartService.createCart(user_id);
+        // Find MySQL user using Firebase UID
+        const [users] = await db.query(
+            `SELECT id FROM users WHERE firebase_uid = ?`,
+            [firebaseUid]
+        );
+
+        if (users.length === 0) {
+            return res.status(404).json({
+                success: false,
+                message: "User not found"
+            });
+        }
+
+        const userId = users[0].id;
+
+        // Check if cart already exists
+        const [existingCart] = await db.query(
+            `SELECT id FROM cart WHERE user_id = ?`,
+            [userId]
+        );
+
+        // If cart already exists, return it
+        if (existingCart.length > 0) {
+            return res.status(200).json({
+                success: true,
+                message: "Cart already exists",
+                cartId: existingCart[0].id
+            });
+        }
+
+        // Create new cart
+        const cartId = await cartService.createCart(userId);
 
         res.status(201).json({
             success: true,
@@ -53,7 +85,7 @@ const createCart = async (req, res) => {
         });
 
     } catch (error) {
-        console.error(error);
+        console.error("Create Cart Error:", error);
 
         res.status(500).json({
             success: false,
@@ -61,15 +93,48 @@ const createCart = async (req, res) => {
         });
     }
 };
-
-
 // ADD ITEM TO CART
 const addItemToCart = async (req, res) => {
     try {
-        const { cart_id, product_id, quantity } = req.body;
+        // Firebase UID from verified token
+        const firebaseUid = req.user.uid;
 
+        // Get product details from request
+        const { product_id, quantity } = req.body;
+
+        // Find MySQL user using Firebase UID
+        const [users] = await db.query(
+            `SELECT id FROM users WHERE firebase_uid = ?`,
+            [firebaseUid]
+        );
+
+        if (users.length === 0) {
+            return res.status(404).json({
+                success: false,
+                message: "User not found"
+            });
+        }
+
+        const userId = users[0].id;
+
+        // Find cart belonging to authenticated user
+        const [carts] = await db.query(
+            `SELECT id FROM cart WHERE user_id = ?`,
+            [userId]
+        );
+
+        if (carts.length === 0) {
+            return res.status(404).json({
+                success: false,
+                message: "Cart not found"
+            });
+        }
+
+        const cartId = carts[0].id;
+
+        // Add product to user's cart
         const cartItemId = await cartService.addItemToCart(
-            cart_id,
+            cartId,
             product_id,
             quantity
         );
@@ -81,7 +146,7 @@ const addItemToCart = async (req, res) => {
         });
 
     } catch (error) {
-        console.error(error);
+        console.error("Add Cart Item Error:", error);
 
         res.status(500).json({
             success: false,
@@ -90,14 +155,34 @@ const addItemToCart = async (req, res) => {
     }
 };
 
-
 // UPDATE CART ITEM
+// UPDATE CART ITEM QUANTITY
 const updateCartItem = async (req, res) => {
     try {
+        const firebaseUid = req.user.uid;
         const { quantity } = req.body;
+        const cartItemId = req.params.itemId;
 
+
+        // Find MySQL user using Firebase UID
+        const [users] = await db.query(
+            `SELECT id FROM users WHERE firebase_uid = ?`,
+            [firebaseUid]
+        );
+
+        if (users.length === 0) {
+            return res.status(404).json({
+                success: false,
+                message: "User not found"
+            });
+        }
+
+        const userId = users[0].id;
+
+        // Update only if cart item belongs to authenticated user
         const updated = await cartService.updateCartItem(
-            req.params.itemId,
+            cartItemId,
+            userId,
             quantity
         );
 
@@ -113,22 +198,53 @@ const updateCartItem = async (req, res) => {
             message: "Cart item updated successfully"
         });
 
-    } catch (error) {
-        console.error(error);
+    } 
+    catch (error) {
+    console.error("Update Cart Item Error:", error);
 
-        res.status(500).json({
+    if (
+        error.message === "Quantity must be a positive integer" ||
+        error.message === "Requested quantity exceeds available stock"
+    ) {
+        return res.status(400).json({
             success: false,
-            message: "Failed to update cart item"
+            message: error.message
         });
     }
+
+    return res.status(500).json({
+        success: false,
+        message: "Failed to update cart item"
+    });
+}
 };
 
-
+// REMOVE ITEM FROM CART
 // REMOVE ITEM FROM CART
 const removeCartItem = async (req, res) => {
     try {
+        const firebaseUid = req.user.uid;
+        const cartItemId = req.params.itemId;
+
+        // Find MySQL user using Firebase UID
+        const [users] = await db.query(
+            `SELECT id FROM users WHERE firebase_uid = ?`,
+            [firebaseUid]
+        );
+
+        if (users.length === 0) {
+            return res.status(404).json({
+                success: false,
+                message: "User not found"
+            });
+        }
+
+        const userId = users[0].id;
+
+        // Remove only if cart item belongs to authenticated user
         const removed = await cartService.removeCartItem(
-            req.params.itemId
+            cartItemId,
+            userId
         );
 
         if (!removed) {
@@ -140,15 +256,15 @@ const removeCartItem = async (req, res) => {
 
         res.status(200).json({
             success: true,
-            message: "Product removed from cart"
+            message: "Cart item removed successfully"
         });
 
     } catch (error) {
-        console.error(error);
+        console.error("Remove Cart Item Error:", error);
 
         res.status(500).json({
             success: false,
-            message: "Failed to remove product from cart"
+            message: "Failed to remove cart item"
         });
     }
 };

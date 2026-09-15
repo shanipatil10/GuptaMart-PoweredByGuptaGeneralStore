@@ -8,22 +8,22 @@ const {
     addOrderItem,
     getOrderItems,
     getOrderDetails,
-    updateOrderStatus,
+    updateOrderStatus, 
     checkout
 } = require("../controllers/orderController");
 
 const router = express.Router();
 
-router.get("/", getOrders);
+router.get("/", verifyToken, getOrders);
 
-router.post("/checkout", checkout);
-router.post("/", createOrder);
+router.post("/checkout", verifyToken, checkout);
+//router.post("/", createOrder);
 
-router.post("/items", addOrderItem);
-router.get("/:orderId/items", getOrderItems);
+//router.post("/items", addOrderItem);
+router.get("/:orderId/items", verifyToken, getOrderItems);
 
-router.get("/:id/details", getOrderDetails);
-router.put("/:id/status", updateOrderStatus);
+router.get("/:id/details", verifyToken, getOrderDetails);
+router.put("/:id/status", verifyToken, updateOrderStatus);
 
-router.get("/:id", getOrderById);
+router.get("/:id", verifyToken, getOrderById);
 module.exports = router;

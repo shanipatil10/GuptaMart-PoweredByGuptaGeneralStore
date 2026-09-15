@@ -9,6 +9,21 @@ const getAllOrders = async () => {
 
     return rows;
 };
+
+// GET ORDERS BY USER ID
+const getOrdersByUserId = async (userId) => {
+    const [rows] = await db.query(
+        `SELECT *
+         FROM orders
+         WHERE user_id = ?
+         ORDER BY created_at DESC`,
+        [userId]
+    );
+
+    return rows;
+};
+
+// GET ORDER BY ID
 const getOrderById = async (id) => {
     const [rows] = await db.query(
         `SELECT *
@@ -19,6 +34,19 @@ const getOrderById = async (id) => {
 
     return rows[0];
 };
+
+const getOrderByIdForUser = async (orderId, userId) => {
+    const [rows] = await db.query(
+        `SELECT *
+         FROM orders
+         WHERE id = ?
+         AND user_id = ?`,
+        [orderId, userId]
+    );
+
+    return rows[0];
+};
+
 const createOrder = async (orderData) => {
     const {
         user_id,
@@ -95,6 +123,21 @@ const getOrderItems = async (orderId) => {
 
 const getOrderDetails = async (orderId) => {
     const order = await getOrderById(orderId);
+
+    if (!order) {
+        return null;
+    }
+
+    const items = await getOrderItems(orderId);
+
+    return {
+        ...order,
+        items
+    };
+};
+
+const getOrderDetailsForUser = async (orderId, userId) => {
+    const order = await getOrderByIdForUser(orderId, userId);
 
     if (!order) {
         return null;
@@ -251,11 +294,14 @@ const checkout = async (orderData) => {
 
 module.exports = {
     getAllOrders,
+    getOrdersByUserId,
     getOrderById,
+    getOrderByIdForUser,
+    getOrderDetails,
+    getOrderDetailsForUser,
     createOrder,
     addOrderItem,
     getOrderItems,
-    getOrderDetails,
     updateOrderStatus,
     getCartItemsForCheckout,
     checkout
