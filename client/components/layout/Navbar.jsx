@@ -1,12 +1,14 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import Link from "next/link";
-import { usePathname } from "next/navigation";
+import Image from "next/image";
+import { usePathname, useRouter } from "next/navigation";
 import { Search, ShoppingCart, User, Menu, X, Leaf } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { useCart } from "@/context/CartContext";
+import { PRODUCTS } from "@/lib/data/products";
 
 const NAV_LINKS = [
   { label: "Home", href: "/" },
@@ -14,6 +16,20 @@ const NAV_LINKS = [
   { label: "About", href: "/about" },
   { label: "Contact", href: "/contact" },
 ];
+
+// products.js is the canonical source — search reads straight from it,
+// no second product list.
+const ALL_PRODUCTS = Object.values(PRODUCTS);
+
+function searchProducts(query) {
+  const q = query.trim().toLowerCase();
+  if (!q) return [];
+  return ALL_PRODUCTS.filter(
+    (product) =>
+      product.name.toLowerCase().includes(q) ||
+      product.category.toLowerCase().includes(q)
+  );
+}
 
 /**
  * Logo
@@ -76,22 +92,125 @@ function NavLinks({ className = "", onLinkClick }) {
 }
 
 /**
+ * SearchResultRow
+ * Compact result row for the search dropdown — deliberately not
+ * ProductCard, which is a square grid card and doesn't fit a slim
+ * list. Navigation happens via router.push on click/Enter, so this is
+ * a <button role="option">, not a link — standard for combobox-style
+ * widgets where the row is part of the search interaction, not a
+ * plain hyperlink.
+ */
+function SearchResultRow({ product, onSelect }) {
+  return (
+    <button
+      type="button"
+      role="option"
+      aria-selected="false"
+      onClick={() => onSelect(product)}
+      className="flex w-full items-center gap-3 rounded-xl p-2 text-left transition-colors duration-150 ease-out hover:bg-[#ebf7ea] focus-visible:bg-[#ebf7ea] focus-visible:outline-none"
+    >
+      <span className="relative h-11 w-11 shrink-0 overflow-hidden rounded-lg bg-[#ebf7ea]">
+        <Image src={product.image} alt="" fill sizes="44px" className="object-cover" />
+      </span>
+      <span className="min-w-0 flex-1">
+        <span className="block truncate text-sm font-semibold text-[#1a1c19]">
+          {product.name}
+        </span>
+        <span className="block text-xs text-[#4e6452]">
+          {product.category} • {product.unit}
+        </span>
+      </span>
+      <span className="shrink-0 text-sm font-semibold text-[#1c6d24]">
+        ₹{product.price}
+      </span>
+    </button>
+  );
+}
+
+/**
  * SearchBar
  * Rounded search input, reusable across desktop and mobile layouts.
+ * Each instance (desktop/mobile) owns its own query/open state — they
+ * aren't shared, which is fine since they're never visible at once
+ * (desktop search is md:flex, mobile panel is md:hidden).
  */
 function SearchBar({ className = "" }) {
+  const router = useRouter();
+  const containerRef = useRef(null);
+
+  const [query, setQuery] = useState("");
+  const [isOpen, setIsOpen] = useState(false);
+
+  const results = searchProducts(query);
+  const showDropdown = isOpen && query.trim().length > 0;
+
+  useEffect(() => {
+    function handleClickOutside(event) {
+      if (containerRef.current && !containerRef.current.contains(event.target)) {
+        setIsOpen(false);
+      }
+    }
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
+  }, []);
+
+  function handleChange(event) {
+    setQuery(event.target.value);
+    setIsOpen(true);
+  }
+
+  function handleKeyDown(event) {
+    if (event.key === "Escape") {
+      setIsOpen(false);
+      event.currentTarget.blur();
+    }
+  }
+
+  function handleSelect(product) {
+    setQuery("");
+    setIsOpen(false);
+    router.push(`/product/${product.id}`);
+  }
+
   return (
-    <div className={`relative w-full ${className}`}>
+    <div ref={containerRef} className={`relative w-full ${className}`}>
       <Search
         className="pointer-events-none absolute left-4 top-1/2 h-4 w-4 -translate-y-1/2 text-neutral-400"
         aria-hidden="true"
       />
       <Input
         type="search"
+        value={query}
+        onChange={handleChange}
+        onFocus={() => query.trim() && setIsOpen(true)}
+        onKeyDown={handleKeyDown}
         placeholder="Search fresh groceries..."
         aria-label="Search products"
+        role="combobox"
+        aria-expanded={showDropdown}
+        aria-controls="navbar-search-results"
+        autoComplete="off"
         className="h-11 w-full rounded-full border border-transparent bg-neutral-100/70 pl-11 pr-4 text-[13.5px] text-neutral-700 placeholder:text-neutral-500 shadow-none transition-all duration-200 ease-out hover:bg-neutral-100 focus-visible:border-green-500 focus-visible:bg-white focus-visible:ring-2 focus-visible:ring-green-500/20 focus-visible:shadow-lg"
       />
+
+      {showDropdown && (
+        <div
+          id="navbar-search-results"
+          role="listbox"
+          aria-label="Search results"
+          className="absolute left-0 right-0 top-[calc(100%+8px)] z-50 max-h-80 overflow-y-auto rounded-2xl border border-neutral-100 bg-white p-2 shadow-[0_12px_32px_rgba(30,60,35,0.12)] animate-in fade-in slide-in-from-top-1 duration-200"
+        >
+          {results.length > 0 ? (
+            results.map((product) => (
+              <SearchResultRow key={product.id} product={product} onSelect={handleSelect} />
+            ))
+          ) : (
+            <p className="px-3 py-4 text-center text-sm text-neutral-500">
+              No products found
+            </p>
+          )}
+        </div>
+      )}
     </div>
   );
 }
