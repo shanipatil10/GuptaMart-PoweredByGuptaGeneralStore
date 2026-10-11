@@ -8,8 +8,9 @@ import Footer from "@/components/layout/Footer";
 export default function GlobalError({ error, reset }) {
   function handleTryAgain() {
     reset();
+    throw new Error("Test error boundary");
   }
-
+  
   return (
     <>
       <Navbar />
@@ -28,15 +29,16 @@ export default function GlobalError({ error, reset }) {
             Something went wrong
           </p>
 
-          <h1 className="mt-2 text-[32px] font-semibold leading-10 tracking-[-0.01em] text-[#1a1c19] sm:text-[40px] sm:leading-[48px]">
+          <h1 className="mt-2 text-[32px] font-semibold leading-10 tracking-[-0.01em] text-[#1a1c19] sm:text-[40px] sm:leading-12">
             We hit a little snag
           </h1>
 
           <p className="mx-auto mt-3 max-w-md text-sm leading-6 text-[#40493d] sm:text-base">
             Something unexpected happened while loading this page. Please try
             again or return to GuptaMart.
+            
           </p>
-
+          
           <div className="mt-8 flex flex-wrap items-center justify-center gap-3">
             <button
               type="button"
