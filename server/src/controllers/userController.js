@@ -1,3 +1,5 @@
+// CHANGE NEEDED before exposing these handlers: use verified identity and
+// allowlisted profile fields; never trust client-supplied firebase_uid or role.
 const userService = require("../services/userService");
 
 // GET ALL USERS

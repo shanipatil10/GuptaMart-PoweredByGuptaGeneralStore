@@ -1,5 +1,8 @@
 const db = require("../config/db");
 
+// CHANGE NEEDED: validate productId and require quantity to be a positive
+// integer in addItemToCart, as updateCartItem already does.
+
 // GET CART BY USER ID
 const getCartByUserId = async (userId) => {
     const [rows] = await db.query(

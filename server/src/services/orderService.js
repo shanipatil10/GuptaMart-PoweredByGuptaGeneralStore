@@ -1,5 +1,8 @@
 const db = require("../config/db");
 
+// No service changes needed for active checkout/read paths reviewed here.
+// Keep createOrder/addOrderItem unexposed unless caller ownership is enforced.
+
 const getAllOrders = async () => {
     const [rows] = await db.query(`
         SELECT *

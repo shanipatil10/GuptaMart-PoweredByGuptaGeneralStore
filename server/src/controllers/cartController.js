@@ -1,6 +1,9 @@
 const cartService = require("../services/cartService");
 const db = require("../config/db");
 
+// No controller changes needed for ownership checks; validate add-item input in
+// cartService.js and keep every cart route behind verifyToken.
+
 // GET CART BY USER ID
 const getCart = async (req, res) => {
     try {

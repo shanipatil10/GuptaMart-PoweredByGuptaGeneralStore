@@ -1,3 +1,5 @@
+// No service changes needed for the reviewed security concerns: queries are
+// parameterized; enforce admin access in productRoutes.js.
 const db = require("../config/db");
 
 const getAllProducts = async () => {

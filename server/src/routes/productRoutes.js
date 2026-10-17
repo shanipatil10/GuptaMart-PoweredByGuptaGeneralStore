@@ -1,3 +1,12 @@
+// CHANGE NEEDED: Keep product reads public, but require a verified admin for writes.
+// Before enabling these route changes, add/export a requireAdmin middleware; the
+// current authMiddleware exports verifyToken only.
+// const verifyToken = require("../middleware/authMiddleware");
+// const { requireAdmin } = require("../middleware/authMiddleware");
+// router.post("/", verifyToken, requireAdmin, createProduct);
+// router.put("/:id", verifyToken, requireAdmin, updateProduct);
+// router.delete("/:id", verifyToken, requireAdmin, deleteProduct);
+
 const express = require("express");
 
 const {

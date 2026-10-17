@@ -1,5 +1,8 @@
 const db = require("../config/db");
 
+// No service changes needed for the reviewed security concerns: queries are
+// parameterized; enforce admin access in categoryRoutes.js.
+
 // GET ALL CATEGORIES
 const getAllCategories = async () => {
     const [rows] = await db.query(

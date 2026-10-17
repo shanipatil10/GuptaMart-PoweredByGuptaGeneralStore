@@ -1,5 +1,8 @@
 const { auth } = require("../config/firebaseAdmin");
 
+// Required before enabling the commented product/category/user route examples:
+// add and export admin-role and user-owner authorization middleware. This module
+// currently verifies Firebase tokens only.
 const verifyToken = async (req, res, next) => {
     try {
         const authHeader = req.headers.authorization;

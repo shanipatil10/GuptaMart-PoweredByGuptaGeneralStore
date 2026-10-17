@@ -1,3 +1,5 @@
+// No controller changes needed for route authorization; protect product writes
+// with an admin middleware in productRoutes.js before enabling them.
 const productService = require("../services/productService");
 
 // ===============================

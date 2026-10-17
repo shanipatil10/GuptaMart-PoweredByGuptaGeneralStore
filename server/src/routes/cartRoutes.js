@@ -11,6 +11,8 @@ const {
 
 const router = express.Router();
 
+// No route changes needed: all cart operations require a verified token, and
+// the controller/service scope cart access to the authenticated user's account.
 router.get("/", verifyToken, getCart);
 
 router.post("/", verifyToken, createCart);

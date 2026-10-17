@@ -14,6 +14,10 @@ const {
 
 const router = express.Router();
 
+// No route changes needed for active order routes: they require a verified
+// token, user reads are scoped to the owner, and status updates check admin role.
+// Keep the raw createOrder/addOrderItem routes disabled unless they are redesigned
+// to derive user/order ownership from the authenticated account.
 router.get("/", verifyToken, getOrders);
 
 router.post("/checkout", verifyToken, checkout);

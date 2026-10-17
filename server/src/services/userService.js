@@ -1,3 +1,5 @@
+// CHANGE NEEDED: do not return SELECT * user records; allowlist profile fields
+// and prevent request data from setting firebase_uid or role.
 const db = require("../config/db");
 
 // GET ALL USERS

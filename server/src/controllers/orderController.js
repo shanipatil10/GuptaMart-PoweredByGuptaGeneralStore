@@ -1,6 +1,10 @@
 const orderService = require("../services/orderService");
 const db = require("../config/db");
 
+// No controller changes needed for active order authorization: reads are scoped
+// to the authenticated owner and updateOrderStatus checks the database role.
+// Keep createOrder/addOrderItem unavailable until ownership is enforced.
+
 // GET ALL ORDERS
 // GET MY ORDERS
 const getOrders = async (req, res) => {

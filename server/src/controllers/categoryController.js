@@ -1,5 +1,8 @@
 const categoryService = require("../services/categoryService");
 
+// No controller changes needed for route authorization; protect category writes
+// with an admin middleware in categoryRoutes.js before enabling them.
+
 // GET ALL CATEGORIES
 const getCategories = async (req, res) => {
     try {
