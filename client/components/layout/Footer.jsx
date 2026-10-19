@@ -62,9 +62,9 @@ export default function Footer() {
               Store Information
             </h3>
             <ul className="mt-4 space-y-2.5 text-sm text-[#40493d]">
-              <li>Address: to be added</li>
-              <li>Phone: to be added</li>
-              <li>Store hours: to be added</li>
+              <li>Address: Shop 123, Walekar Homes, Ambarnath West</li>
+              <li>Phone: +91 8291519735</li>
+              <li>Store hours: 7a.m. to 11p.m.</li>
             </ul>
           </div>
 
@@ -74,7 +74,7 @@ export default function Footer() {
               Contact
             </h3>
             <ul className="mt-4 space-y-2.5 text-sm text-[#40493d]">
-              <li>Email: to be added</li>
+              <li>Email: shani@gmail.com</li>
             </ul>
           </div>
         </div>
